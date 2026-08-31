@@ -1,0 +1,9 @@
+$fs_home $mol_list
+	sub /
+		<= Header $mol_text
+			text \The TOX File Service
+		<= AuthPanel
+		<= FileDirectoryList $mol_list
+			rows <= file_directories /
+
+

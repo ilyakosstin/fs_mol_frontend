@@ -1,0 +1,9 @@
+$fs_oauth2_callback $mol_page
+	sub /
+		<= wait_label \Give us one moment...
+			dom_name \h2
+		<= code \<code>
+		<= Token $mol_button_major
+			title \Get access & refresh tokens
+			click? <=> token? null
+

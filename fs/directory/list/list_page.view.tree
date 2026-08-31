@@ -1,9 +1,0 @@
-$fs_directory_list_page $mol_view
-	sub /
-		<= header \This is the list
-		<= list $mol_list
-			rows <= Items /
-
-$fs_directory_list_item $mol_link
-	sub /
-		<= displayed_name \displayed name

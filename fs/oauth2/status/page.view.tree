@@ -1,0 +1,8 @@
+$fs_oauth2_status $mol_page
+	sub /
+		<= access_token \Access token
+			dom_name \h3
+		<= refresh_token \Refresh token
+			dom_name \h3
+		<= user_data \User data
+			dom_name \h3

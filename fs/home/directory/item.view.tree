@@ -1,0 +1,9 @@
+$fs_home_directory $mol_view
+	sub /
+		<= Index $mol_text
+			text <= index
+		<= DisplayedName $mol_link
+			title <= displayed_name \DISPLAYED_NAME
+			uri <= link_uri
+		<= AdditionalInfo $mol_text
+			text <= additional_info

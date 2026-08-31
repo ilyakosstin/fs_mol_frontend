@@ -1,0 +1,6 @@
+$fs_local $mol_page
+	sub /
+		<= Code_local $mol_string
+			value?val <=> code_local?val \
+		<= Code_query $mol_string
+			value?val <=> code_query?val \

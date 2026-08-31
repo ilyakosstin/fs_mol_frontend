@@ -1,0 +1,9 @@
+$fs_oauth2_init $mol_page
+	sub /
+		<= wait_label \Starting OAuth2 login process...
+			dom_name \h2
+		<= current_auth_data \Current data
+			dom_name \h3
+		<= Proceed $mol_button_major
+			title \Proceed
+			click? <=> proceed? null
