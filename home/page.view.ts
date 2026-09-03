@@ -2,14 +2,9 @@ namespace $.$$ {
 
     export class $bog_tox_fs_home extends $.$bog_tox_fs_home {
 
-        file_directories_loading_error() : string {
-            return ""
-        }
-
         @ $mol_mem
         file_directories() {
-             const directories = $bog_tox_fs_tox_fs_get_directories().concat($bog_tox_fs_tox_fs_mock_directories())
-             return directories.map((dto, i) => new this.$.$bog_tox_fs_home_directory(dto, i))
+             return $bog_tox_fs_tox_fs_get_directories().concat($bog_tox_fs_tox_fs_mock_directories())
         }
 
         @ $mol_mem
@@ -35,7 +30,7 @@ namespace $.$$ {
         // Q: why it needs "?" to be able to cache that?
         // 
         // maybe bee null ( optional value )
-        AuthLoggedIn(data?: $OidData) {
+        AuthLoggedIn(data?: any) {
             const panel = new $mol_list()
             const label = new $mol_text()
             const logoutLink = new $mol_link()

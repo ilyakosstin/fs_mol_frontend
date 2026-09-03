@@ -37,10 +37,9 @@ namespace $ {
                      body: fd,
              } ) 
 
-             return { fetched_at: Date.now(), data }
+             return { fetched_at: Date.now(), data } as token_stored
     }
 
-     @ $mol_action
      export function $bog_tox_fs_tox_oauth2_exchange( code: string ) {
              const fd = new URLSearchParams({
                      grant_type: 'authorization_code',
@@ -52,12 +51,11 @@ namespace $ {
              return stored
     }
 
-     @ $mol_action
      export function $bog_tox_fs_tox_oauth2_refresh( refresh_token: string ) {
              const fd = new URLSearchParams({ grant_type: 'refresh_token', refresh_token })
              const stored = $bog_tox_fs_tox_oauth2_fetch( fd )
              $bog_tox_fs_tox_oauth2_stored( stored )
-             return stored
+             return stored 
      }
 
     export function $bog_tox_fs_tox_oauth2_token_data() {
