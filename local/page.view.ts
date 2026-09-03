@@ -15,7 +15,7 @@ namespace $.$$ {
         @ $mol_mem
         code_query(next?: string) : string {
             if(next === undefined) {
-                return new URLSearchParams(window.location.search).get('code') ?? ""
+                return new URLSearchParams(this.$.$mol_dom_context.location.search).get('code') ?? ""
             }
             return next
         }

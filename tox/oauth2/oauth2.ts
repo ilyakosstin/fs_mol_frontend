@@ -21,8 +21,10 @@ namespace $ {
      const SCOPES = [ 'openid', 'fs.read', 'fs.write' ]
 
 
+    // Единственная точка входа — app. Код прилетает в query (?code=),
+    // фрагмент в redirect_uri запрещён RFC 6749 3.1.2.
     function $bog_tox_fs_tox_oauth2_redirect_uri() {
-        return SELF_BASE_URI() + "/fs/oauth2/callback/index.html"
+        return SELF_BASE_URI() + "/bog/tox/fs/app/"
     }
 
     export function $bog_tox_fs_tox_oauth2_stored( next?: token_stored | null ) {
@@ -90,7 +92,7 @@ namespace $ {
     }
 
     export function $bog_tox_fs_tox_oauth2_init_login() {
-             $mol_dom_context.location.href = SELF_BASE_URI() + '/fs/oauth2/init/index.html'
+             $mol_dom_context.location.href = $bog_tox_fs_tox_oauth2_authorization_uri()
     }
 
 }

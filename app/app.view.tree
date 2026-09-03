@@ -1,0 +1,8 @@
+$bog_tox_fs_app $mol_book2
+	plugins /
+		<= Theme $mol_theme_auto
+	pages /
+		<= Home $bog_tox_fs_home
+		<= Callback $bog_tox_fs_oauth2_callback
+		<= Status $bog_tox_fs_oauth2_status
+		<= Local $bog_tox_fs_local

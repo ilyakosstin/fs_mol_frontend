@@ -2,13 +2,13 @@ namespace $.$$ {
     export class $bog_tox_fs_oauth2_status extends $.$bog_tox_fs_oauth2_status {
 
         @ $mol_mem
-        token_data() : $TokenData | null {
-            return $mol_wire_sync($bog_tox_fs_tox_oauth2_get_current_token_data)()
+        token_data() : tox_oauth2_token | null {
+            return $bog_tox_fs_tox_oauth2_token_data()
         }
 
         @ $mol_mem
         user_data() : string {
-            return JSON.stringify($mol_wire_sync($bog_tox_fs_tox_oauth2_get_user_data)())
+            return JSON.stringify( $bog_tox_fs_tox_oauth2_user_data() )
         }
 
         @ $mol_mem
