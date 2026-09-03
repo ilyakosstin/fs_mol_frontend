@@ -8,7 +8,7 @@ namespace $.$$ {
          * через свойство, которое выставляет владелец.
          */
         override dto() {
-            return super.dto() as FileDirectoryCompactDto
+            return super.dto() as $bog_tox_fs_tox_fs_directory
         }
 
         displayed_name() {

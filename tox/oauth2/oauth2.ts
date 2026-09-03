@@ -1,122 +1,191 @@
 namespace $ {
 
-	export type tox_oauth2_token = {
-        access_token: string
-        refresh_token: string
-        expires_in: number      // секунды
-        token_type: string
-        scope: string
-        id_token: string
-    }
+	/** Ответ token endpoint. */
+	export type $bog_tox_fs_tox_oauth2_tokens = {
+		access_token: string
+		refresh_token: string
+		token_type: string
+		scope: string
+		id_token: string
+	}
 
-    export type token_stored = {
-        fetched_at: number
-        data: tox_oauth2_token
-    }
+	/** Разобранная полезная нагрузка JWT. */
+	type Payload = {
+		exp?: number
+		userid?: string
+	}
 
-     export type tox_oauth2_oid = { userid: string }
-     const CLIENT_ID = 'fs-frontend'
-     const LOOKAHEAD = 5_000
-     const STORE = 'oauth2'
-     const SCOPES = [ 'openid', 'fs.read', 'fs.write' ]
+	/** Параметры, которые в наш адрес добавляет провайдер. */
+	const CALLBACK_PARAMS = [
+		'code', 'state', 'session_state', 'iss',
+		'error', 'error_description', 'error_uri',
+	] as const
 
+	export class $bog_tox_fs_tox_oauth2 extends $mol_object2 {
 
-    /** Параметры, которые в наш URL добавляет провайдер. */
-    const CALLBACK_PARAMS = [
-        'code', 'state', 'session_state', 'iss',
-        'error', 'error_description', 'error_uri',
-    ] as const
+		// --- конфигурация: переопределяется через $mol_ambient ---
 
-    /**
-     * Текущий адрес, очищенный от параметров провайдера, — он же
-     * и redirect_uri. Не зашитая строка: MAM собирает деплой в "-/",
-     * который на проде станет корнем, и путь поехал бы. Фрагмент
-     * срезаем — его в redirect_uri запрещает RFC 6749 3.1.2, а $mol
-     * держит в хэше роутинг, так что он там бы и оказался.
-     */
-    export function $bog_tox_fs_tox_oauth2_clean_uri() {
-        const url = new URL( $mol_dom_context.location.href )
-        for( const key of CALLBACK_PARAMS ) url.searchParams.delete( key )
-        url.hash = ''
-        return url.toString().replace( /\?$/, '' )
-    }
+		client_id() { return 'fs-frontend' }
 
-    function $bog_tox_fs_tox_oauth2_redirect_uri() {
-        return $bog_tox_fs_tox_oauth2_clean_uri()
-    }
+		auth_base_uri() { return this.$.AUTH_BASE_URI() }
 
-    export function $bog_tox_fs_tox_oauth2_stored( next?: token_stored | null ) {
-             return $mol_state_local.value< token_stored >( STORE, next )
-    }
+		scopes() { return [ 'openid', 'fs.read', 'fs.write' ] as readonly string[] }
 
-    function $bog_tox_fs_tox_oauth2_fetch( fd: URLSearchParams ) {
-             fd.set( 'client_id', CLIENT_ID )
+		/** Запас на дорогу до сервера, мс. */
+		min_validity() { return 5_000 }
 
-             const data = $mol_fetch.json( AUTH_BASE_URI() + '/oauth2/token', {
-                     method: 'POST',
-                     body: fd,
-             } ) 
+		store_key() { return `${ this.client_id() }_oauth2` }
 
-             return { fetched_at: Date.now(), data } as token_stored
-    }
+		endpoint( key: 'auth' | 'token' ) {
+			return this.auth_base_uri() + ( key === 'auth' ? '/oauth2/authorize' : '/oauth2/token' )
+		}
 
-     export function $bog_tox_fs_tox_oauth2_exchange( code: string ) {
-             const fd = new URLSearchParams({
-                     grant_type: 'authorization_code',
-                     code,
-                     redirect_uri: $bog_tox_fs_tox_oauth2_redirect_uri(),
-             })
-             const stored = $bog_tox_fs_tox_oauth2_fetch( fd )
-             $bog_tox_fs_tox_oauth2_stored( stored )
+		// --- адрес приложения ---
 
-             // Код одноразовый: убираем его из адреса, чтобы перезагрузка
-             // не пыталась обменять его повторно. Через $mol_state_arg.href
-             // — это history.replaceState, без перезагрузки страницы.
-             $mol_state_arg.href( $bog_tox_fs_tox_oauth2_clean_uri() )
+		/**
+		 * Текущий адрес, очищенный от параметров провайдера, — он же
+		 * и redirect_uri. Не зашитая строка: MAM собирает деплой в "-/",
+		 * который на проде станет корнем, и путь поехал бы. Фрагмент
+		 * срезаем: его в redirect_uri запрещает RFC 6749 3.1.2, а $mol
+		 * держит в хэше роутинг, так что он там бы и оказался.
+		 */
+		clean_uri() {
+			const url = new URL( this.$.$mol_dom_context.location.href )
+			for( const key of CALLBACK_PARAMS ) url.searchParams.delete( key )
+			url.hash = ''
+			return url.toString().replace( /\?$/, '' )
+		}
 
-             return stored
-    }
+		redirect_uri() { return this.clean_uri() }
 
-     export function $bog_tox_fs_tox_oauth2_refresh( refresh_token: string ) {
-             const fd = new URLSearchParams({ grant_type: 'refresh_token', refresh_token })
-             const stored = $bog_tox_fs_tox_oauth2_fetch( fd )
-             $bog_tox_fs_tox_oauth2_stored( stored )
-             return stored 
-     }
+		/** Код, который провайдер вернул в query. Фрагмент тут не годится — см. clean_uri. */
+		@ $mol_mem
+		code() {
+			const search = this.$.$mol_dom_context.location.search
+			return new URLSearchParams( search ).get( 'code' ) ?? ''
+		}
 
-    export function $bog_tox_fs_tox_oauth2_token_data() {
-             const stored = $bog_tox_fs_tox_oauth2_stored()
-             if( !stored ) return null
+		// --- хранилище ---
 
-             const expires_at = stored.fetched_at + stored.data.expires_in * 1000
-             if( Date.now() < expires_at - LOOKAHEAD ) return stored.data
+		@ $mol_mem
+		stored( next?: $bog_tox_fs_tox_oauth2_tokens | null ) {
+			return this.$.$mol_state_local.value< $bog_tox_fs_tox_oauth2_tokens >( this.store_key(), next )
+		}
 
-             return $bog_tox_fs_tox_oauth2_refresh( stored.data.refresh_token ).data
-    }
+		// --- разбор токена ---
 
-    export function $bog_tox_fs_tox_oauth2_user_data() {
-             const token = $bog_tox_fs_tox_oauth2_token_data()
-             return token && $mol_jwt_decode( token.id_token ).payload
-    }
+		payload( token: string ): Payload | null {
+			try {
+				return this.$.$mol_jwt_decode( token ).payload as Payload
+			} catch( error ) {
+				if( $mol_promise_like( error ) ) $mol_fail_hidden( error )
+				$mol_fail_log( error )
+				return null
+			}
+		}
 
-    export function $bog_tox_fs_tox_oauth2_auth_header() {
-             const token = $bog_tox_fs_tox_oauth2_token_data()
-             return token && { Authorization: `Bearer ${ token.access_token }` }
-    }
+		/**
+		 * Срок жизни берём из claim exp самого токена, а не из expires_in:
+		 * не зависит ни от расхождения часов, ни от того, когда мы успели
+		 * записать ответ в хранилище.
+		 */
+		expired( token: string ) {
+			const exp = this.payload( token )?.exp
+			if( !exp ) return true
+			return exp * 1000 - Date.now() - this.min_validity() <= 0
+		}
 
-    export function $bog_tox_fs_tox_oauth2_authorization_uri() {
-             const url = new URL( AUTH_BASE_URI() + '/oauth2/authorize' )
-             url.search = new URLSearchParams({
-                     redirect_uri: $bog_tox_fs_tox_oauth2_redirect_uri(),
-                     scope: SCOPES.join(' '),
-                     response_type: 'code',
-                     client_id: CLIENT_ID,
-             }).toString()
-             return url.toString()
-    }
+		// --- запросы ---
 
-    export function $bog_tox_fs_tox_oauth2_init_login() {
-             $mol_dom_context.location.href = $bog_tox_fs_tox_oauth2_authorization_uri()
-    }
+		@ $mol_action
+		protected fetch_tokens( fd: URLSearchParams ) {
+			fd.set( 'client_id', this.client_id() )
+
+			return this.$.$mol_fetch.json( this.endpoint( 'token' ), {
+				method: 'POST',
+				body: fd,
+			} ) as $bog_tox_fs_tox_oauth2_tokens
+		}
+
+		@ $mol_action
+		protected fetch_by_refresh( refresh_token: string ) {
+			return this.fetch_tokens( new URLSearchParams({
+				grant_type: 'refresh_token',
+				refresh_token,
+			}) )
+		}
+
+		@ $mol_action
+		protected fetch_by_code( code: string ) {
+			return this.fetch_tokens( new URLSearchParams({
+				grant_type: 'authorization_code',
+				code,
+				redirect_uri: this.redirect_uri(),
+			}) )
+		}
+
+		// --- состояние сессии ---
+
+		/** Актуальные токены: истёкший access_token молча обновляет по refresh_token. */
+		@ $mol_mem
+		tokens(): $bog_tox_fs_tox_oauth2_tokens | null {
+			const stored = this.stored()
+			if( !stored ) return null
+
+			if( !this.expired( stored.access_token ) ) return stored
+
+			return this.stored( this.fetch_by_refresh( stored.refresh_token ) )
+		}
+
+		access_token() { return this.tokens()?.access_token ?? null }
+
+		user() {
+			const tokens = this.tokens()
+			return tokens && this.payload( tokens.id_token )
+		}
+
+		logged() { return Boolean( this.tokens() ) }
+
+		auth_header() {
+			const token = this.access_token()
+			return token ? { Authorization: `Bearer ${ token }` } : null
+		}
+
+		// --- флоу ---
+
+		login_uri() {
+			const url = new URL( this.endpoint( 'auth' ) )
+			url.search = new URLSearchParams({
+				redirect_uri: this.redirect_uri(),
+				scope: this.scopes().join( ' ' ),
+				response_type: 'code',
+				client_id: this.client_id(),
+			}).toString()
+			return url.toString()
+		}
+
+		@ $mol_action
+		login() {
+			this.$.$mol_dom_context.location.href = this.login_uri()
+		}
+
+		@ $mol_action
+		logout() {
+			this.stored( null )
+		}
+
+		@ $mol_action
+		exchange( code: string ) {
+			const tokens = this.stored( this.fetch_by_code( code ) )
+
+			// Код одноразовый: убираем его из адреса, иначе перезагрузка
+			// попытается обменять его повторно. Через $mol_state_arg.href
+			// — это history.replaceState, без перезагрузки страницы.
+			this.$.$mol_state_arg.href( this.clean_uri() )
+
+			return tokens
+		}
+
+	}
 
 }

@@ -2,36 +2,34 @@ namespace $.$$ {
 
     export class $bog_tox_fs_home extends $.$bog_tox_fs_home {
 
-        @ $mol_mem
-        user_data() {
-            return $bog_tox_fs_tox_oauth2_user_data()
-        }
+        protected session() { return this.$.$mol_one.$bog_tox_fs_tox_oauth2 }
+        protected files() { return this.$.$mol_one.$bog_tox_fs_tox_fs }
 
         auth_label() {
-            const user = this.user_data()
+            const user = this.session().user()
             return user ? `Logged in as userid=${ user.userid }` : 'Not logged in'
         }
 
         auth_rows() {
             return [
                 this.Auth_label(),
-                this.user_data() ? this.Logout() : this.Login(),
+                this.session().logged() ? this.Logout() : this.Login(),
             ]
         }
 
         @ $mol_action
-        login( next?: any ) {
-            this.$.$mol_dom_context.location.href = this.$.$bog_tox_fs_tox_oauth2_authorization_uri()
+        login() {
+            this.session().login()
         }
 
         @ $mol_action
         logout( next?: any ) {
-            this.$.$bog_tox_fs_tox_oauth2_stored( null )
+            this.session().logout()
         }
 
         @ $mol_mem
         directories_data() {
-            return $bog_tox_fs_tox_fs_mock_directories()
+            return this.files().mock_directories()
         }
 
         /** Ключ переживает перерисовку — строка не пересоздаётся. */
