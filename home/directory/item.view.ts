@@ -1,12 +1,11 @@
-
 namespace $.$$ {
 
     export class $bog_tox_fs_home_directory extends $.$bog_tox_fs_home_directory {
 
-        dto: $FileDirectoryCompactDto
+        dto: FileDirectoryCompactDto
         _index: number
 
-        constructor(dto: $FileDirectoryCompactDto, _index: number) {
+        constructor(dto: FileDirectoryCompactDto, _index: number) {
             super()
             this.dto = dto
             this._index = _index

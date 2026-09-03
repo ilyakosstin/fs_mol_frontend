@@ -1,12 +1,12 @@
 namespace $ {
 	
-    export function $tox_fs_get_directories() {
+    export function $bog_tox_fs_tox_fs_get_directories() {
         return $mol_fetch.json(SELF_BASE_URI() + "/directories", {
-            headers: $bog_tox_fs_tox_oauth2_get_auth_header() ?? {}
-        }) as $FileDirectoryCompactDto[]
+            headers: $bog_tox_fs_tox_oauth2_auth_header() ?? {}
+        }) as FileDirectoryCompactDto[]
     }
 
-    export type $FileDirectoryCompactDto = {
+    export type FileDirectoryCompactDto = {
         id: string,
         ownerId: string,
         name: string | null,
@@ -14,7 +14,7 @@ namespace $ {
         nFiles: number
     };
 
-    export function $tox_fs_mock_directories() : $FileDirectoryCompactDto[] {
+    export function $bog_tox_fs_tox_fs_mock_directories() : FileDirectoryCompactDto[] {
         return [
             {
                 id: "UUID1",

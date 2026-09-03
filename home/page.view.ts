@@ -8,13 +8,8 @@ namespace $.$$ {
 
         @ $mol_mem
         file_directories() {
-            try {
-                const directories = $mol_wire_sync($tox_fs_get_directories)().concat($tox_fs_mock_directories())
-                return directories.map((dto, i) => new this.$.$bog_tox_fs_home_directory(dto, i))
-            } catch(e) {
-                this.file_directories_loading_error = () => `Could not load file directories! Error: ${e}`
-                return []
-            }
+             const directories = $bog_tox_fs_tox_fs_get_directories().concat($bog_tox_fs_tox_fs_mock_directories())
+             return directories.map((dto, i) => new this.$.$bog_tox_fs_home_directory(dto, i))
         }
 
         @ $mol_mem
@@ -38,6 +33,8 @@ namespace $.$$ {
 
         @ $mol_mem
         // Q: why it needs "?" to be able to cache that?
+        // 
+        // maybe bee null ( optional value )
         AuthLoggedIn(data?: $OidData) {
             const panel = new $mol_list()
             const label = new $mol_text()
@@ -58,7 +55,7 @@ namespace $.$$ {
 
         @ $mol_mem
         AuthPanel() {
-            const data = $mol_wire_sync($bog_tox_fs_tox_oauth2_get_user_data)()
+            const data = $bog_tox_fs_tox_oauth2_user_data()
 
             if (data == null) {
                 return this.AuthNotLoggedIn()
