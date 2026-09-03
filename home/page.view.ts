@@ -2,8 +2,8 @@ namespace $.$$ {
 
     export class $bog_tox_fs_home extends $.$bog_tox_fs_home {
 
-        protected session() { return this.$.$mol_one.$bog_tox_fs_tox_oauth2 }
-        protected files() { return this.$.$mol_one.$bog_tox_fs_tox_fs }
+        session() { return this.$.$mol_one.$bog_tox_fs_tox_oauth2 }
+        files() { return this.$.$mol_one.$bog_tox_fs_tox_fs }
 
         auth_label() {
             const user = this.session().user()
