@@ -15,6 +15,11 @@ namespace $ {
 		userid?: string
 	}
 
+	/** Отказы, после которых сессию не восстановить — только разлогинить. */
+	const DEAD_SESSION: readonly string[] = [
+		'invalid_grant', 'invalid_token', 'unauthorized_client',
+	]
+
 	/** Параметры, которые в наш адрес добавляет провайдер. */
 	const CALLBACK_PARAMS = [
 		'code', 'state', 'session_state', 'iss',
@@ -97,18 +102,38 @@ namespace $ {
 
 		// --- запросы ---
 
-		@ $mol_action
-		protected fetch_tokens( fd: URLSearchParams ) {
-			fd.set( 'client_id', this.client_id() )
-
-			return this.$.$mol_fetch.json( this.endpoint( 'token' ), {
-				method: 'POST',
-				body: fd,
-			} ) as $bog_tox_fs_tox_oauth2_tokens
+		/** Тело ответа, если оно вообще разбирается в JSON. */
+		parse( response: $mol_fetch_response ) {
+			try {
+				return response.json() as Record< string, string > | null
+			} catch( error ) {
+				if( $mol_promise_like( error ) ) $mol_fail_hidden( error )
+				return null
+			}
 		}
 
 		@ $mol_action
-		protected fetch_by_refresh( refresh_token: string ) {
+		fetch_tokens( fd: URLSearchParams ) {
+			fd.set( 'client_id', this.client_id() )
+
+			const response = this.$.$mol_fetch.response( this.endpoint( 'token' ), {
+				method: 'POST',
+				body: fd,
+			} )
+
+			const body = this.parse( response )
+
+			if( response.status() === 'success' ) {
+				return body as unknown as $bog_tox_fs_tox_oauth2_tokens
+			}
+
+			throw new Error( body?.error ?? response.message(), {
+				cause: body ?? response,
+			} )
+		}
+
+		@ $mol_action
+		fetch_by_refresh( refresh_token: string ) {
 			return this.fetch_tokens( new URLSearchParams({
 				grant_type: 'refresh_token',
 				refresh_token,
@@ -116,7 +141,7 @@ namespace $ {
 		}
 
 		@ $mol_action
-		protected fetch_by_code( code: string ) {
+		fetch_by_code( code: string ) {
 			return this.fetch_tokens( new URLSearchParams({
 				grant_type: 'authorization_code',
 				code,
@@ -134,7 +159,19 @@ namespace $ {
 
 			if( !this.expired( stored.access_token ) ) return stored
 
-			return this.stored( this.fetch_by_refresh( stored.refresh_token ) )
+			try {
+				return this.stored( this.fetch_by_refresh( stored.refresh_token ) )
+			} catch( error ) {
+				if( $mol_promise_like( error ) ) $mol_fail_hidden( error )
+
+				const code = error instanceof Error ? error.message : ''
+
+				if( !DEAD_SESSION.includes( code ) ) $mol_fail_hidden( error )
+
+				$mol_fail_log( error )
+				this.stored( null )
+				return null
+			}
 		}
 
 		access_token() { return this.tokens()?.access_token ?? null }

@@ -11,7 +11,7 @@ namespace $ {
 	export class $bog_tox_fs_tox_fs extends $mol_object2 {
 
 
-		protected session() { return this.$.$mol_one.$bog_tox_fs_tox_oauth2 }
+		session() { return this.$.$mol_one.$bog_tox_fs_tox_oauth2 }
 
 		@ $mol_mem
 		directories() {
