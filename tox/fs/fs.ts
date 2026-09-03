@@ -2,7 +2,7 @@ namespace $ {
 	
     export function $tox_fs_get_directories() {
         return $mol_fetch.json(SELF_BASE_URI() + "/directories", {
-            headers: $tox_oauth2_get_auth_header() ?? {}
+            headers: $bog_tox_fs_tox_oauth2_get_auth_header() ?? {}
         }) as $FileDirectoryCompactDto[]
     }
 

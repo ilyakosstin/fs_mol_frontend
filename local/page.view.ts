@@ -1,7 +1,7 @@
 
 namespace $.$$ {
 
-    export class $fs_local extends $.$fs_local {
+    export class $bog_tox_fs_local extends $.$bog_tox_fs_local {
 
         @ $mol_mem
         code_local(next?: string) : string {

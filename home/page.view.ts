@@ -1,6 +1,6 @@
 namespace $.$$ {
 
-    export class $fs_home extends $.$fs_home {
+    export class $bog_tox_fs_home extends $.$bog_tox_fs_home {
 
         file_directories_loading_error() : string {
             return ""
@@ -10,7 +10,7 @@ namespace $.$$ {
         file_directories() {
             try {
                 const directories = $mol_wire_sync($tox_fs_get_directories)().concat($tox_fs_mock_directories())
-                return directories.map((dto, i) => new this.$.$fs_home_directory(dto, i))
+                return directories.map((dto, i) => new this.$.$bog_tox_fs_home_directory(dto, i))
             } catch(e) {
                 this.file_directories_loading_error = () => `Could not load file directories! Error: ${e}`
                 return []
@@ -58,7 +58,7 @@ namespace $.$$ {
 
         @ $mol_mem
         AuthPanel() {
-            const data = $mol_wire_sync($tox_oauth2_get_user_data)()
+            const data = $mol_wire_sync($bog_tox_fs_tox_oauth2_get_user_data)()
 
             if (data == null) {
                 return this.AuthNotLoggedIn()

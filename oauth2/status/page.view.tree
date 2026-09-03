@@ -1,4 +1,4 @@
-$fs_oauth2_status $mol_page
+$bog_tox_fs_oauth2_status $mol_page
 	sub /
 		<= access_token \Access token
 			dom_name \h3

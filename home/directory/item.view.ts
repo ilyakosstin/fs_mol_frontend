@@ -1,7 +1,7 @@
 
 namespace $.$$ {
 
-    export class $fs_home_directory extends $.$fs_home_directory {
+    export class $bog_tox_fs_home_directory extends $.$bog_tox_fs_home_directory {
 
         dto: $FileDirectoryCompactDto
         _index: number
