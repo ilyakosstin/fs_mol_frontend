@@ -23,7 +23,7 @@ namespace $ {
 
 	export class $bog_tox_fs_tox_oauth2 extends $mol_object2 {
 
-		// --- конфигурация: переопределяется через $mol_ambient ---
+		// --- конфигурация: переопределяется через $. ---
 
 		client_id() { return 'fs-frontend' }
 
