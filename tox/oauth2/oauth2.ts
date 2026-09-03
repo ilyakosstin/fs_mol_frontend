@@ -42,15 +42,15 @@ namespace $ {
         fd.append("client_id", $tox_oauth2_CLIENT_ID)
         fd.append("client_secret", $tox_oauth2_CLIENT_SECRET)
 
-        const data = $mol_fetch.request(AUTH_BASE_URI + "/oauth2/token", {
+        const data = $mol_fetch.json(AUTH_BASE_URI() + "/oauth2/token", {
             method: "POST",
             body: fd
-        }  as $TokenData
+        } ) as $TokenData
 
         return {
             fetched_at: new Date(),
             data: data 
-        } as $TokenFetchResult
+        } 
     }
 
     export function $tox_oauth2_refresh_token_fetch_token(refresh_token: string) {
@@ -69,7 +69,7 @@ namespace $ {
     }
 
     export function $tox_oauth2_get_authorization_uri() {
-        const baseUri = $.$tox_AUTH_BASE_URI + "/oauth2/authorize"
+        const baseUri = AUTH_BASE_URI() + "/oauth2/authorize"
 
         const url = new URL(baseUri);
 
@@ -90,12 +90,12 @@ namespace $ {
             return null;
         }
 
-        const expires_at = new Date(storage.fetched_at).getTime() + storage.data.expires_in
+        const expires_at = new Date(storage.fetched_at).getTime() + storage.data.expires_in * 1000 // было 3.6 секунды
 
         if (Date.now() > expires_at - $tox_oauth2_EXPIRY_LOOKAHEAD_MS) {
             // time to update the token
 
-            const newTokenFetch : $TokenFetchResult = await $tox_oauth2_refresh_token_fetch_token(storage.data.refresh_token)
+            const newTokenFetch : $TokenFetchResult = $tox_oauth2_refresh_token_fetch_token(storage.data.refresh_token)
 
             $tox_oauth2_save_token_fetch_result(newTokenFetch)
 

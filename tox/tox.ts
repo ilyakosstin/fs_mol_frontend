@@ -4,7 +4,9 @@ namespace $ {
         radio: string
     }
 
-    export function $tox_resolve_test() : $TestDto {
+    // если добавить $ то придется класть по тому пути как называется функция \\ что бы проверить запусти npx mam  bog/tox/fs/tox 
+    // когда с $ и когда без 
+    export function tox_resolve_test() : $TestDto {
         return $mol_fetch.json(`${SELF_BASE_URI()}/test`) as $TestDto
     }
     

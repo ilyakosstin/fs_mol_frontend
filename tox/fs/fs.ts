@@ -1,6 +1,6 @@
 namespace $ {
 	
-    export function $tox_fs_get_directories() : Promise<$FileDirectoryCompactDto[]> {
+    export function $tox_fs_get_directories() {
         return $mol_fetch.json(SELF_BASE_URI() + "/directories", {
             headers: $tox_oauth2_get_auth_header() ?? {}
         }) as $FileDirectoryCompactDto[]
