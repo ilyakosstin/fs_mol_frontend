@@ -2,29 +2,27 @@ namespace $.$$ {
 
     export class $bog_tox_fs_home_directory extends $.$bog_tox_fs_home_directory {
 
-        dto: FileDirectoryCompactDto
-        _index: number
-
-        constructor(dto: FileDirectoryCompactDto, _index: number) {
-            super()
-            this.dto = dto
-            this._index = _index
-        }
-
-        index() {
-            return this._index.toString()
+        /**
+         * Компонент $mol нельзя создавать с аргументами конструктора:
+         * базовый класс из view.tree имеет new (). Данные приходят
+         * через свойство, которое выставляет владелец.
+         */
+        override dto() {
+            return super.dto() as FileDirectoryCompactDto
         }
 
         displayed_name() {
-            return this.dto.name ?? this.dto.id
+            const dto = this.dto()
+            return dto.name ?? dto.id
         }
 
         link_uri() {
-            return "/fs/directory/" + this.dto.id
+            return this.$.$mol_state_arg.link({ directory: this.dto().id })
         }
 
         additional_info() {
-            return `(nFiles=${this.dto.nFiles}, isPublic=${this.dto.isPublic})`
+            const dto = this.dto()
+            return `(nFiles=${ dto.nFiles }, isPublic=${ dto.isPublic })`
         }
 
     }

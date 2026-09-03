@@ -1,9 +1,11 @@
 $bog_tox_fs_home_directory $mol_view
+	dto null
+	index \
 	sub /
 		<= Index $mol_text
 			text <= index
 		<= DisplayedName $mol_link
 			title <= displayed_name \DISPLAYED_NAME
-			uri <= link_uri
+			uri <= link_uri \
 		<= AdditionalInfo $mol_text
-			text <= additional_info
+			text <= additional_info \

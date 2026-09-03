@@ -2,8 +2,15 @@ $bog_tox_fs_home $mol_list
 	sub /
 		<= Header $mol_text
 			text \The TOX File Service
-		<= AuthPanel
+		<= Auth $mol_list
+			rows <= auth_rows /
 		<= FileDirectoryList $mol_list
 			rows <= file_directories /
-
-
+	Auth_label $mol_text
+		text <= auth_label \
+	Login $mol_button_minor
+		title \Log in
+		click? <=> login? null
+	Logout $mol_button_minor
+		title \Log out
+		click? <=> logout? null

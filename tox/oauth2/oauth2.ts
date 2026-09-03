@@ -21,10 +21,28 @@ namespace $ {
      const SCOPES = [ 'openid', 'fs.read', 'fs.write' ]
 
 
-    // Единственная точка входа — app. Код прилетает в query (?code=),
-    // фрагмент в redirect_uri запрещён RFC 6749 3.1.2.
+    /** Параметры, которые в наш URL добавляет провайдер. */
+    const CALLBACK_PARAMS = [
+        'code', 'state', 'session_state', 'iss',
+        'error', 'error_description', 'error_uri',
+    ] as const
+
+    /**
+     * Текущий адрес, очищенный от параметров провайдера, — он же
+     * и redirect_uri. Не зашитая строка: MAM собирает деплой в "-/",
+     * который на проде станет корнем, и путь поехал бы. Фрагмент
+     * срезаем — его в redirect_uri запрещает RFC 6749 3.1.2, а $mol
+     * держит в хэше роутинг, так что он там бы и оказался.
+     */
+    export function $bog_tox_fs_tox_oauth2_clean_uri() {
+        const url = new URL( $mol_dom_context.location.href )
+        for( const key of CALLBACK_PARAMS ) url.searchParams.delete( key )
+        url.hash = ''
+        return url.toString().replace( /\?$/, '' )
+    }
+
     function $bog_tox_fs_tox_oauth2_redirect_uri() {
-        return SELF_BASE_URI() + "/bog/tox/fs/app/"
+        return $bog_tox_fs_tox_oauth2_clean_uri()
     }
 
     export function $bog_tox_fs_tox_oauth2_stored( next?: token_stored | null ) {
@@ -50,6 +68,12 @@ namespace $ {
              })
              const stored = $bog_tox_fs_tox_oauth2_fetch( fd )
              $bog_tox_fs_tox_oauth2_stored( stored )
+
+             // Код одноразовый: убираем его из адреса, чтобы перезагрузка
+             // не пыталась обменять его повторно. Через $mol_state_arg.href
+             // — это history.replaceState, без перезагрузки страницы.
+             $mol_state_arg.href( $bog_tox_fs_tox_oauth2_clean_uri() )
+
              return stored
     }
 

@@ -7,66 +7,45 @@ namespace $.$$ {
             return $bog_tox_fs_tox_oauth2_user_data()
         }
 
-        @ $mol_mem
-        file_directories() {
-             const dtos = $bog_tox_fs_tox_fs_mock_directories()
-             // $mol_list.rows ждёт компоненты, а не DTO
-             return dtos.map( ( dto, i ) => new this.$.$bog_tox_fs_home_directory( dto, i ) )
+        auth_label() {
+            const user = this.user_data()
+            return user ? `Logged in as userid=${ user.userid }` : 'Not logged in'
+        }
+
+        auth_rows() {
+            return [
+                this.Auth_label(),
+                this.user_data() ? this.Logout() : this.Login(),
+            ]
         }
 
         @ $mol_action
-        login() {
+        login( next?: any ) {
             this.$.$mol_dom_context.location.href = this.$.$bog_tox_fs_tox_oauth2_authorization_uri()
         }
 
         @ $mol_action
-        logout() {
+        logout( next?: any ) {
             this.$.$bog_tox_fs_tox_oauth2_stored( null )
         }
 
         @ $mol_mem
-        AuthNotLoggedIn() {
-            const panel = new $mol_list()
-            const label = new $mol_text()
-            const loginButton = new $mol_button_minor()
-
-            label.text = () => "Not logged in"
-
-            loginButton.title = () => "Log in"
-            loginButton.click = () => this.login()
-
-            panel.rows = () => [ label, loginButton ]
-
-            return panel
+        directories_data() {
+            return $bog_tox_fs_tox_fs_mock_directories()
         }
 
-        /**
-         * Без аргумента: @ $mol_mem — это ячейка, её единственный
-         * параметр означает "записываемое значение", а не вход.
-         * С AuthLoggedIn(data) закешировался бы первый вызов,
-         * а последующие data игнорировались. Данные читаем внутри.
-         */
-        @ $mol_mem
-        AuthLoggedIn() {
-            const panel = new $mol_list()
-            const label = new $mol_text()
-            const logoutButton = new $mol_button_minor()
-
-            label.text = () => `Logged in as userid=${ this.user_data()?.userid }`
-
-            logoutButton.title = () => "Log out"
-            logoutButton.click = () => this.logout()
-
-            panel.rows = () => [ label, logoutButton ]
-
-            return panel
+        /** Ключ переживает перерисовку — строка не пересоздаётся. */
+        @ $mol_mem_key
+        Directory( index: number ) {
+            const row = new this.$.$bog_tox_fs_home_directory()
+            row.dto = () => this.directories_data()[ index ]
+            row.index = () => String( index )
+            return row
         }
 
         @ $mol_mem
-        AuthPanel() {
-            return this.user_data() == null
-                ? this.AuthNotLoggedIn()
-                : this.AuthLoggedIn()
+        file_directories() {
+            return this.directories_data().map( ( _, i ) => this.Directory( i ) )
         }
 
     }
