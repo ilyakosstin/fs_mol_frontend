@@ -1,15 +1,10 @@
 namespace $ {
-
-
-
+	
     export async function $tox_fs_get_directories() : Promise<$FileDirectoryCompactDto[]> {
-        return fetch($tox_FS_BASE_URI + "/directories", {
+        return $mol_fetch.json($tox_FS_BASE_URI + "/directories", {
             headers: await $tox_oauth2_get_auth_header() ?? {}
-        })
-        .then(res => res.json())
-        .then(res => res as $FileDirectoryCompactDto[])
+        }) as $FileDirectoryCompactDto[]
     }
-
 
     export type $FileDirectoryCompactDto = {
         id: string,
@@ -18,7 +13,6 @@ namespace $ {
         isPublic: boolean,
         nFiles: number
     };
-
 
     export function $tox_fs_mock_directories() : $FileDirectoryCompactDto[] {
         return [
