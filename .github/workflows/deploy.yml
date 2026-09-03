@@ -1,0 +1,37 @@
+name: $bog_tox_fs
+
+permissions: write-all
+
+on:
+    workflow_dispatch:
+    push:
+    pull_request:
+    delete:
+
+concurrency:
+    group: deploy-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: hyoo-ru/mam_build@master2
+              with:
+                  package: "bog/tox/fs"
+                  modules: "app"
+
+            - uses: hyoo-ru/gh-deploy@v4.4.1
+              if: github.ref == 'refs/heads/main'
+              with:
+                  folder: "bog/tox/fs/app/-"
+                  clean-exclude: feature
+
+            - name: Deploy feature branch
+              if: startsWith(github.ref, 'refs/heads/feature/')
+              uses: hyoo-ru/gh-deploy@v4.4.1
+              with:
+                  folder: "bog/tox/fs/app/-"
+                  target-folder: ${{ github.ref_name }}
+
