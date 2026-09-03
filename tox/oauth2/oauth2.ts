@@ -38,22 +38,19 @@ namespace $ {
         $mol_state_local.value($tox_oauth2_LOCAL_STORE_NAME, fetch_result)
     }
 
-    function $tox_oauth2_get_token(fd: URLSearchParams) : Promise<$TokenFetchResult> {
+    function $tox_oauth2_get_token(fd: URLSearchParams) : $TokenFetchResult {
         fd.append("client_id", $tox_oauth2_CLIENT_ID)
         fd.append("client_secret", $tox_oauth2_CLIENT_SECRET)
 
-        return fetch($tox_AUTH_BASE_URI + "/oauth2/token", {
+        const data = $mol_fetch.request(AUTH_BASE_URI + "/oauth2/token", {
             method: "POST",
             body: fd
-        })
-        .then(res => res.json())
-        .then(res => res as $TokenData)
-        .then(res => {
-            return {
-                fetched_at: new Date(),
-                data: res
-            } as $TokenFetchResult
-        })
+        }  as $TokenData
+
+        return {
+            fetched_at: new Date(),
+            data: data 
+        } as $TokenFetchResult
     }
 
     export function $tox_oauth2_refresh_token_fetch_token(refresh_token: string) {
@@ -108,19 +105,19 @@ namespace $ {
         return storage.data
     }
 
-    export async function $tox_oauth2_get_user_data() : Promise<$OidData | null> {
-        const tokenData = await $tox_oauth2_get_token_data()
+    export function $tox_oauth2_get_user_data() : $OidData | null {
+        const tokenData = $tox_oauth2_get_token_data()
 
         if(tokenData === null) {
             return null
         }
 
-        return $mol_jwt_decode(tokenData.id_token) as $OidData
+        return $mol_jwt_decode(tokenData.id_token).payload as $OidData
     }
 
-    export async function $tox_oauth2_get_auth_header()  {
+    export function $tox_oauth2_get_auth_header()  {
         
-        const tokenData = await $tox_oauth2_get_token_data()
+        const tokenData = $tox_oauth2_get_token_data()
 
         if(tokenData === null) {
             return null

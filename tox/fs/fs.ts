@@ -1,8 +1,8 @@
 namespace $ {
 	
-    export async function $tox_fs_get_directories() : Promise<$FileDirectoryCompactDto[]> {
-        return $mol_fetch.json($tox_FS_BASE_URI + "/directories", {
-            headers: await $tox_oauth2_get_auth_header() ?? {}
+    export function $tox_fs_get_directories() : Promise<$FileDirectoryCompactDto[]> {
+        return $mol_fetch.json(SELF_BASE_URI() + "/directories", {
+            headers: $tox_oauth2_get_auth_header() ?? {}
         }) as $FileDirectoryCompactDto[]
     }
 
