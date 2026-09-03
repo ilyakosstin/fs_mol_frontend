@@ -1,0 +1,10 @@
+{
+	"name": "bog_tox_fs_app",
+	"short_name": "bog_tox_fs_app",
+	"description": "",
+	"id": "bog_tox_fs_app",
+	"start_url": ".",
+	"display": "standalone",
+	"background_color": "#000000",
+	"theme_color": "#000000"
+}
