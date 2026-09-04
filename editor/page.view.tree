@@ -1,0 +1,9 @@
+$bog_tox_fs_editor $mol_page
+	title @ \Editor
+	tools /
+		<= Lights $mol_lights_toggle
+	body /
+		<= Editor $bog_tox_fs_wysiwyg
+			value?val <=> text?val \
+			height 560
+			placeholder @ \Start typing…

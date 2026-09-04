@@ -1,0 +1,20 @@
+[bog_tox_fs_wysiwyg] {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	align-self: stretch;
+	min-width: 0;
+	max-width: 100%;
+	padding: .25rem;
+}
+
+/* Контейнер, который TinyMCE создаёт рядом с целевым узлом. */
+[bog_tox_fs_wysiwyg] > * {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+/* Полноэкранный режим — поверх шапки $mol_page. */
+[bog_tox_fs_wysiwyg] .tox-fullscreen {
+	z-index: 3;
+}

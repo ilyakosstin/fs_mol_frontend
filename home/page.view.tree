@@ -4,6 +4,9 @@ $bog_tox_fs_home $mol_list
 			text \The TOX File Service
 		<= Auth $mol_list
 			rows <= auth_rows /
+		<= Editor_link $mol_link
+			title @ \Open editor
+			arg * page \editor
 		<= FileDirectoryList $mol_list
 			rows <= file_directories /
 	Auth_label $mol_text

@@ -1,0 +1,30 @@
+$bog_tox_fs_wysiwyg $mol_view
+	value?val \
+	placeholder @ \
+	height 480
+	menubar \edit insert view format table tools
+	extensions /string
+		\advlist
+		\anchor
+		\autolink
+		\charmap
+		\code
+		\codesample
+		\emoticons
+		\fullscreen
+		\image
+		\insertdatetime
+		\link
+		\lists
+		\media
+		\nonbreaking
+		\pagebreak
+		\preview
+		\searchreplace
+		\table
+		\visualblocks
+		\visualchars
+		\wordcount
+	toolbar /string
+		\link unlink anchor image media table | blocks | forecolor backcolor
+		\undo redo | bold italic underline removeformat | alignleft aligncenter alignright | numlist bullist outdent indent blockquote | hr pagebreak code searchreplace fullscreen

@@ -6,3 +6,4 @@ $bog_tox_fs_app $mol_book2
 		<= Callback $bog_tox_fs_oauth2_callback
 		<= Status $bog_tox_fs_oauth2_status
 		<= Local $bog_tox_fs_local
+		<= Editor $bog_tox_fs_editor

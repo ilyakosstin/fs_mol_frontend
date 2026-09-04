@@ -16,6 +16,7 @@ namespace $.$$ {
 				... this.session().code() ? [ this.Callback() ] : [],
 				... page === 'status' ? [ this.Status() ] : [],
 				... page === 'local' ? [ this.Local() ] : [],
+				... page === 'editor' ? [ this.Editor() ] : [],
 			]
 		}
 

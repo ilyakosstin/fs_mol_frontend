@@ -1,0 +1,2 @@
+build $bog_tox_fs_wysiwyg_version \node ./.npm/.build.mjs
+deploy \/bog/tox/fs/wysiwyg/.npm/-/tinymce

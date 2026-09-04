@@ -1,0 +1,13 @@
+{
+	"name": "bog-tox-fs-wysiwyg-npm",
+	"version": "1.0.0",
+	"private": true,
+	"description": "TinyMCE assets for $bog_tox_fs_wysiwyg",
+	"license": "UNLICENSED",
+	"scripts": {
+		"build": "node ./.build.mjs"
+	},
+	"dependencies": {
+		"tinymce": "8.9.0"
+	}
+}
