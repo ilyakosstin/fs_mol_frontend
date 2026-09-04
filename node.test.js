@@ -10215,6 +10215,12 @@ var $;
 			(obj.rows) = () => ((this.auth_rows()));
 			return obj;
 		}
+		Editor_link(){
+			const obj = new this.$.$mol_link();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_tox_fs_home_Editor_link_title")));
+			(obj.arg) = () => ({"page": "editor"});
+			return obj;
+		}
 		file_directories(){
 			return [];
 		}
@@ -10238,6 +10244,7 @@ var $;
 			return [
 				(this.Header()), 
 				(this.Auth()), 
+				(this.Editor_link()), 
 				(this.FileDirectoryList())
 			];
 		}
@@ -10261,6 +10268,7 @@ var $;
 	};
 	($mol_mem(($.$bog_tox_fs_home.prototype), "Header"));
 	($mol_mem(($.$bog_tox_fs_home.prototype), "Auth"));
+	($mol_mem(($.$bog_tox_fs_home.prototype), "Editor_link"));
 	($mol_mem(($.$bog_tox_fs_home.prototype), "FileDirectoryList"));
 	($mol_mem(($.$bog_tox_fs_home.prototype), "login"));
 	($mol_mem(($.$bog_tox_fs_home.prototype), "logout"));
@@ -10547,8 +10555,9 @@ var $;
             });
         }
         response() {
+            const native = $mol_error_enriched(this, () => $mol_wire_sync(this).response_async());
             return this.$.$mol_fetch_response.make({
-                native: $mol_wire_sync(this).response_async(),
+                native,
                 request: this
             });
         }
@@ -11610,22 +11619,27 @@ var $;
                 const el = this.dom_node();
                 const from = el.selectionStart;
                 const to = el.selectionEnd;
-                try {
-                    el.value = this.value_changed(el.value);
-                }
-                catch (error) {
-                    const el = this.dom_node();
-                    if (error instanceof Error) {
-                        el.setCustomValidity(error.message);
-                        el.reportValidity();
-                    }
-                    $mol_fail_hidden(error);
-                }
+                el.value = this.value_changed(el.value);
                 if (to === null)
                     return;
                 el.selectionEnd = to;
                 el.selectionStart = from;
                 this.selection_change(next);
+            }
+            value_changed(next) {
+                const el = this.dom_node();
+                try {
+                    el.setCustomValidity('');
+                    return this.value(next);
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                    if (error instanceof Error) {
+                        el.setCustomValidity(error.message);
+                        el.reportValidity();
+                    }
+                    return next ?? $mol_mem_cached(() => this.value_changed()) ?? '';
+                }
             }
             error_report() {
                 try {
@@ -11686,6 +11700,9 @@ var $;
         __decorate([
             $mol_action
         ], $mol_string.prototype, "event_change", null);
+        __decorate([
+            $mol_mem
+        ], $mol_string.prototype, "value_changed", null);
         __decorate([
             $mol_mem
         ], $mol_string.prototype, "error_report", null);
@@ -11769,6 +11786,371 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$mol_check_icon) = class $mol_check_icon extends ($.$mol_check) {};
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/check/icon/icon.view.css", "[mol_check_icon]:where([mol_check_checked]) {\n\tcolor: var(--mol_theme_current);\n}\n");
+})($ || ($ = {}));
+
+;
+"use strict";
+
+
+;
+	($.$mol_icon_brightness_4) = class $mol_icon_brightness_4 extends ($.$mol_icon) {
+		path(){
+			return "M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z";
+		}
+	};
+
+
+;
+"use strict";
+
+
+;
+	($.$mol_lights_toggle) = class $mol_lights_toggle extends ($.$mol_check_icon) {
+		Lights_icon(){
+			const obj = new this.$.$mol_icon_brightness_4();
+			return obj;
+		}
+		lights(next){
+			if(next !== undefined) return next;
+			return false;
+		}
+		Icon(){
+			return (this.Lights_icon());
+		}
+		hint(){
+			return (this.$.$mol_locale.text("$mol_lights_toggle_hint"));
+		}
+		checked(next){
+			return (this.lights(next));
+		}
+	};
+	($mol_mem(($.$mol_lights_toggle.prototype), "Lights_icon"));
+	($mol_mem(($.$mol_lights_toggle.prototype), "lights"));
+
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        /**
+         * Toggle for Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+         */
+        class $mol_lights_toggle extends $.$mol_lights_toggle {
+            lights(next) {
+                return this.$.$mol_lights(next);
+            }
+        }
+        $$.$mol_lights_toggle = $mol_lights_toggle;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$bog_tox_fs_wysiwyg) = class $bog_tox_fs_wysiwyg extends ($.$mol_view) {
+		value(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		placeholder(){
+			return (this.$.$mol_locale.text("$bog_tox_fs_wysiwyg_placeholder"));
+		}
+		height(){
+			return 480;
+		}
+		menubar(){
+			return "edit insert view format table tools";
+		}
+		extensions(){
+			return [
+				"advlist", 
+				"anchor", 
+				"autolink", 
+				"charmap", 
+				"code", 
+				"codesample", 
+				"emoticons", 
+				"fullscreen", 
+				"image", 
+				"insertdatetime", 
+				"link", 
+				"lists", 
+				"media", 
+				"nonbreaking", 
+				"pagebreak", 
+				"preview", 
+				"searchreplace", 
+				"table", 
+				"visualblocks", 
+				"visualchars", 
+				"wordcount"
+			];
+		}
+		toolbar(){
+			return ["link unlink anchor image media table | blocks | forecolor backcolor", "undo redo | bold italic underline removeformat | alignleft aligncenter alignright | numlist bullist outdent indent blockquote | hr pagebreak code searchreplace fullscreen"];
+		}
+	};
+	($mol_mem(($.$bog_tox_fs_wysiwyg.prototype), "value"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** Dynamic sources import. */
+    class $mol_import extends $mol_object2 {
+        static module(uri) {
+            $mol_wire_solid();
+            return $mol_wire_sync(this).module_async(uri);
+        }
+        static module_async(uri) {
+            return import(uri);
+        }
+        static script(uri) {
+            $mol_wire_solid();
+            return $mol_wire_sync(this).script_async(uri);
+        }
+        static script_async(uri) {
+            const doc = $mol_dom_context.document;
+            const script = doc.createElement('script');
+            script.src = uri;
+            doc.head.appendChild(script);
+            return new Promise((done, fail) => {
+                script.onload = () => done($mol_dom_context);
+                script.onerror = () => fail(new Error(`Can not import ${uri}`));
+            });
+        }
+        static style(uri) {
+            return $mol_wire_sync(this).style_async(uri);
+        }
+        static style_async(uri) {
+            const doc = $mol_dom_context.document;
+            const style = doc.createElement('link');
+            style.rel = 'stylesheet';
+            style.href = uri;
+            doc.head.appendChild(style);
+            return new Promise((done, fail) => {
+                style.onload = () => done(style.sheet);
+                style.onerror = () => fail(new Error(`Can not import ${uri}`));
+            });
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_import, "module", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_import, "script", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_import, "style", null);
+    $.$mol_import = $mol_import;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        /**
+         * WYSIWYG-редактор поверх [TinyMCE](https://www.tiny.cloud/docs/tinymce/latest/).
+         *
+         * Ассеты ставятся из npm (`.npm/package.json`) и попадают в бандл приложения
+         * через `deploy` из `wysiwyg.meta.tree` — ни CDN, ни ключей не требуется.
+         */
+        class $bog_tox_fs_wysiwyg extends $.$bog_tox_fs_wysiwyg {
+            /** Путь до задеплоенных ассетов относительно корня приложения. */
+            static base_uri() {
+                return 'bog/tox/fs/wysiwyg/.npm/-/tinymce';
+            }
+            /** Глобальный TinyMCE. Скрипт грузится один раз на всё приложение. */
+            static api() {
+                $mol_wire_solid();
+                const base = new URL(this.base_uri(), this.$.$mol_dom_context.document.baseURI).href;
+                const api = this.$.$mol_import.script(`${base}/tinymce.min.js?v=${$bog_tox_fs_wysiwyg_version}`).tinymce;
+                // Автодетект корня спотыкается о query-строку, поэтому задаём явно.
+                api.baseURL = base;
+                api.suffix = '.min';
+                return api;
+            }
+            /** Тему редактора держим в одном флаконе с темой приложения. */
+            skin() {
+                return this.$.$mol_lights() ? 'oxide' : 'oxide-dark';
+            }
+            content_skin() {
+                return this.$.$mol_lights() ? 'default' : 'dark';
+            }
+            /** Опции инициализации. Переопределяется у наследников. */
+            config() {
+                return {
+                    license_key: 'gpl',
+                    base_url: $bog_tox_fs_wysiwyg.base_uri(),
+                    menubar: this.menubar(),
+                    plugins: this.extensions().join(' '),
+                    toolbar: this.toolbar().slice(),
+                    toolbar_mode: 'wrap',
+                    height: this.height(),
+                    placeholder: this.placeholder(),
+                    skin: this.skin(),
+                    content_css: this.content_skin(),
+                    branding: false,
+                    promotion: false,
+                    statusbar: true,
+                    elementpath: true,
+                    convert_urls: false,
+                };
+            }
+            /**
+             * Поднимает редактор в собственном узле — $mol этот узел не рендерит,
+             * поэтому перерисовка вьюхи ему не мешает.
+             */
+            async make(config_json) {
+                const target = this.$.$mol_dom_context.document.createElement('div');
+                this.dom_node().appendChild(target);
+                let editor;
+                try {
+                    ;
+                    [editor] = await $bog_tox_fs_wysiwyg.api().init({ ...JSON.parse(config_json), target });
+                }
+                catch (error) {
+                    target.remove();
+                    return $mol_fail_hidden(error);
+                }
+                editor.on('input change undo redo', $mol_wire_async(() => this.value(editor.getContent())));
+                return { editor, target };
+            }
+            /**
+             * Ключ — сериализованный конфиг: сменилась тема или тулбар — атом с прежним
+             * ключом остаётся без подписчиков, и $mol зовёт `destructor()` старого редактора.
+             */
+            mount(config_json) {
+                const { editor, target } = $mol_wire_sync(this).make(config_json);
+                return {
+                    editor,
+                    destructor: () => {
+                        editor.remove();
+                        target.remove();
+                    },
+                };
+            }
+            editor() {
+                return this.mount(JSON.stringify(this.config())).editor;
+            }
+            /** Заливает значение в редактор, когда его меняют снаружи. */
+            content_actual() {
+                const editor = this.editor();
+                const value = this.value();
+                if (editor.getContent() !== value)
+                    editor.setContent(value);
+                return value;
+            }
+            /** Детей не рендерим: внутри хозяйничает TinyMCE. */
+            render() {
+                this.dom_node_actual();
+                this.content_actual();
+            }
+        }
+        __decorate([
+            $mol_mem_key
+        ], $bog_tox_fs_wysiwyg.prototype, "mount", null);
+        __decorate([
+            $mol_mem
+        ], $bog_tox_fs_wysiwyg.prototype, "content_actual", null);
+        __decorate([
+            $mol_mem
+        ], $bog_tox_fs_wysiwyg, "api", null);
+        $$.$bog_tox_fs_wysiwyg = $bog_tox_fs_wysiwyg;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("bog/tox/fs/wysiwyg/wysiwyg.view.css", "[bog_tox_fs_wysiwyg] {\n\tdisplay: flex;\n\tflex: 1 1 auto;\n\tflex-direction: column;\n\talign-self: stretch;\n\tmin-width: 0;\n\tmax-width: 100%;\n\tpadding: .25rem;\n}\n\n/* Контейнер, который TinyMCE создаёт рядом с целевым узлом. */\n[bog_tox_fs_wysiwyg] > * {\n\tflex: 1 1 auto;\n\tmin-width: 0;\n}\n\n/* Полноэкранный режим — поверх шапки $mol_page. */\n[bog_tox_fs_wysiwyg] .tox-fullscreen {\n\tz-index: 3;\n}\n");
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $.$bog_tox_fs_wysiwyg_version = "added 1 package in 504ms\n8.9.0";
+})($ || ($ = {}));
+
+;
+	($.$bog_tox_fs_editor) = class $bog_tox_fs_editor extends ($.$mol_page) {
+		Lights(){
+			const obj = new this.$.$mol_lights_toggle();
+			return obj;
+		}
+		text(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		Editor(){
+			const obj = new this.$.$bog_tox_fs_wysiwyg();
+			(obj.value) = (next) => ((this.text(next)));
+			(obj.height) = () => (560);
+			(obj.placeholder) = () => ((this.$.$mol_locale.text("$bog_tox_fs_editor_Editor_placeholder")));
+			return obj;
+		}
+		title(){
+			return (this.$.$mol_locale.text("$bog_tox_fs_editor_title"));
+		}
+		tools(){
+			return [(this.Lights())];
+		}
+		body(){
+			return [(this.Editor())];
+		}
+	};
+	($mol_mem(($.$bog_tox_fs_editor.prototype), "Lights"));
+	($mol_mem(($.$bog_tox_fs_editor.prototype), "text"));
+	($mol_mem(($.$bog_tox_fs_editor.prototype), "Editor"));
+
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        /** Страница с WYSIWYG-редактором. Черновик переживает перезагрузку. */
+        class $bog_tox_fs_editor extends $.$bog_tox_fs_editor {
+            text(next) {
+                return this.$.$mol_state_local.value('$bog_tox_fs_editor.text', next) ?? '';
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $bog_tox_fs_editor.prototype, "text", null);
+        $$.$bog_tox_fs_editor = $bog_tox_fs_editor;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
 	($.$bog_tox_fs_app) = class $bog_tox_fs_app extends ($.$mol_book2) {
 		Theme(){
 			const obj = new this.$.$mol_theme_auto();
@@ -11790,6 +12172,10 @@ var $;
 			const obj = new this.$.$bog_tox_fs_local();
 			return obj;
 		}
+		Editor(){
+			const obj = new this.$.$bog_tox_fs_editor();
+			return obj;
+		}
 		plugins(){
 			return [(this.Theme())];
 		}
@@ -11798,7 +12184,8 @@ var $;
 				(this.Home()), 
 				(this.Callback()), 
 				(this.Status()), 
-				(this.Local())
+				(this.Local()), 
+				(this.Editor())
 			];
 		}
 	};
@@ -11807,6 +12194,7 @@ var $;
 	($mol_mem(($.$bog_tox_fs_app.prototype), "Callback"));
 	($mol_mem(($.$bog_tox_fs_app.prototype), "Status"));
 	($mol_mem(($.$bog_tox_fs_app.prototype), "Local"));
+	($mol_mem(($.$bog_tox_fs_app.prototype), "Editor"));
 
 
 ;
@@ -11832,6 +12220,7 @@ var $;
                     ...this.session().code() ? [this.Callback()] : [],
                     ...page === 'status' ? [this.Status()] : [],
                     ...page === 'local' ? [this.Local()] : [],
+                    ...page === 'editor' ? [this.Editor()] : [],
                 ];
             }
         }

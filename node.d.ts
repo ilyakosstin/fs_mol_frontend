@@ -4713,25 +4713,27 @@ declare namespace $ {
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_list__rows_bog_tox_fs_home_3 = $mol_type_enforce<
+	type $mol_link__title_bog_tox_fs_home_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_link['title'] >
+	>
+	type $mol_link__arg_bog_tox_fs_home_4 = $mol_type_enforce<
+		({ 
+			'page': string,
+		}) 
+		,
+		ReturnType< $mol_link['arg'] >
+	>
+	type $mol_list__rows_bog_tox_fs_home_5 = $mol_type_enforce<
 		ReturnType< $bog_tox_fs_home['file_directories'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_text__text_bog_tox_fs_home_4 = $mol_type_enforce<
+	type $mol_text__text_bog_tox_fs_home_6 = $mol_type_enforce<
 		ReturnType< $bog_tox_fs_home['auth_label'] >
 		,
 		ReturnType< $mol_text['text'] >
-	>
-	type $mol_button_minor__title_bog_tox_fs_home_5 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_minor['title'] >
-	>
-	type $mol_button_minor__click_bog_tox_fs_home_6 = $mol_type_enforce<
-		ReturnType< $bog_tox_fs_home['login'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
 	>
 	type $mol_button_minor__title_bog_tox_fs_home_7 = $mol_type_enforce<
 		string
@@ -4739,6 +4741,16 @@ declare namespace $ {
 		ReturnType< $mol_button_minor['title'] >
 	>
 	type $mol_button_minor__click_bog_tox_fs_home_8 = $mol_type_enforce<
+		ReturnType< $bog_tox_fs_home['login'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_button_minor__title_bog_tox_fs_home_9 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_minor['title'] >
+	>
+	type $mol_button_minor__click_bog_tox_fs_home_10 = $mol_type_enforce<
 		ReturnType< $bog_tox_fs_home['logout'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
@@ -4747,6 +4759,7 @@ declare namespace $ {
 		Header( ): $mol_text
 		auth_rows( ): readonly(any)[]
 		Auth( ): $mol_list
+		Editor_link( ): $mol_link
 		file_directories( ): readonly(any)[]
 		FileDirectoryList( ): $mol_list
 		auth_label( ): string
@@ -5028,6 +5041,7 @@ declare namespace $.$$ {
      */
     class $mol_string extends $.$mol_string {
         event_change(next?: Event): void;
+        value_changed(next?: string): string;
         error_report(): void;
         hint_visible(): string;
         disabled(): boolean;
@@ -5073,6 +5087,277 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+
+	export class $mol_check_icon extends $mol_check {
+	}
+	
+}
+
+//# sourceMappingURL=icon.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_icon_brightness_4 extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=4.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_lights_toggle extends $mol_check_icon {
+		Lights_icon( ): $mol_icon_brightness_4
+		lights( next?: boolean ): boolean
+		Icon( ): ReturnType< $mol_lights_toggle['Lights_icon'] >
+		hint( ): string
+		checked( next?: ReturnType< $mol_lights_toggle['lights'] > ): ReturnType< $mol_lights_toggle['lights'] >
+	}
+	
+}
+
+//# sourceMappingURL=toggle.view.tree.d.ts.map
+declare namespace $.$$ {
+    /**
+     * Toggle for Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+     */
+    class $mol_lights_toggle extends $.$mol_lights_toggle {
+        lights(next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
+    /** Dynamic sources import. */
+    class $mol_import extends $mol_object2 {
+        static module(uri: string): any;
+        static module_async(uri: string): Promise<any>;
+        static script(uri: string): any;
+        static script_async(uri: string): Promise<any>;
+        static style(uri: string): any;
+        static style_async(uri: string): any;
+    }
+}
+
+declare namespace $ {
+
+	type $bog_tox_fs_wysiwyg_extensions__1 = $mol_type_enforce<
+		`advlist`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__2 = $mol_type_enforce<
+		`anchor`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__3 = $mol_type_enforce<
+		`autolink`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__4 = $mol_type_enforce<
+		`charmap`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__5 = $mol_type_enforce<
+		`code`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__6 = $mol_type_enforce<
+		`codesample`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__7 = $mol_type_enforce<
+		`emoticons`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__8 = $mol_type_enforce<
+		`fullscreen`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__9 = $mol_type_enforce<
+		`image`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__10 = $mol_type_enforce<
+		`insertdatetime`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__11 = $mol_type_enforce<
+		`link`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__12 = $mol_type_enforce<
+		`lists`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__13 = $mol_type_enforce<
+		`media`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__14 = $mol_type_enforce<
+		`nonbreaking`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__15 = $mol_type_enforce<
+		`pagebreak`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__16 = $mol_type_enforce<
+		`preview`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__17 = $mol_type_enforce<
+		`searchreplace`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__18 = $mol_type_enforce<
+		`table`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__19 = $mol_type_enforce<
+		`visualblocks`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__20 = $mol_type_enforce<
+		`visualchars`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_extensions__21 = $mol_type_enforce<
+		`wordcount`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_toolbar__22 = $mol_type_enforce<
+		`link unlink anchor image media table | blocks | forecolor backcolor`
+		,
+		string
+	>
+	type $bog_tox_fs_wysiwyg_toolbar__23 = $mol_type_enforce<
+		`undo redo | bold italic underline removeformat | alignleft aligncenter alignright | numlist bullist outdent indent blockquote | hr pagebreak code searchreplace fullscreen`
+		,
+		string
+	>
+	export class $bog_tox_fs_wysiwyg extends $mol_view {
+		value( next?: string ): string
+		placeholder( ): string
+		height( ): number
+		menubar( ): string
+		extensions( ): readonly(string)[]
+		toolbar( ): readonly(string)[]
+	}
+	
+}
+
+//# sourceMappingURL=wysiwyg.view.tree.d.ts.map
+declare namespace $.$$ {
+    /** Инстанс TinyMCE вместе с узлом, в который он смонтирован. */
+    type Mount = {
+        editor: any;
+        target: Element;
+    };
+    /**
+     * WYSIWYG-редактор поверх [TinyMCE](https://www.tiny.cloud/docs/tinymce/latest/).
+     *
+     * Ассеты ставятся из npm (`.npm/package.json`) и попадают в бандл приложения
+     * через `deploy` из `wysiwyg.meta.tree` — ни CDN, ни ключей не требуется.
+     */
+    export class $bog_tox_fs_wysiwyg extends $.$bog_tox_fs_wysiwyg {
+        /** Путь до задеплоенных ассетов относительно корня приложения. */
+        static base_uri(): string;
+        /** Глобальный TinyMCE. Скрипт грузится один раз на всё приложение. */
+        static api(): any;
+        /** Тему редактора держим в одном флаконе с темой приложения. */
+        skin(): "oxide" | "oxide-dark";
+        content_skin(): "dark" | "default";
+        /** Опции инициализации. Переопределяется у наследников. */
+        config(): Record<string, any>;
+        /**
+         * Поднимает редактор в собственном узле — $mol этот узел не рендерит,
+         * поэтому перерисовка вьюхи ему не мешает.
+         */
+        make(config_json: string): Promise<Mount>;
+        /**
+         * Ключ — сериализованный конфиг: сменилась тема или тулбар — атом с прежним
+         * ключом остаётся без подписчиков, и $mol зовёт `destructor()` старого редактора.
+         */
+        mount(config_json: string): {
+            editor: any;
+            destructor: () => void;
+        };
+        editor(): any;
+        /** Заливает значение в редактор, когда его меняют снаружи. */
+        content_actual(): string;
+        /** Детей не рендерим: внутри хозяйничает TinyMCE. */
+        render(): void;
+    }
+    export {};
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    let $bog_tox_fs_wysiwyg_version: string;
+}
+
+declare namespace $ {
+
+	type $bog_tox_fs_wysiwyg__value_bog_tox_fs_editor_1 = $mol_type_enforce<
+		ReturnType< $bog_tox_fs_editor['text'] >
+		,
+		ReturnType< $bog_tox_fs_wysiwyg['value'] >
+	>
+	type $bog_tox_fs_wysiwyg__height_bog_tox_fs_editor_2 = $mol_type_enforce<
+		number
+		,
+		ReturnType< $bog_tox_fs_wysiwyg['height'] >
+	>
+	type $bog_tox_fs_wysiwyg__placeholder_bog_tox_fs_editor_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_tox_fs_wysiwyg['placeholder'] >
+	>
+	export class $bog_tox_fs_editor extends $mol_page {
+		Lights( ): $mol_lights_toggle
+		text( next?: string ): string
+		Editor( ): $bog_tox_fs_wysiwyg
+		title( ): string
+		tools( ): readonly(any)[]
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=page.view.tree.d.ts.map
+declare namespace $.$$ {
+    /** Страница с WYSIWYG-редактором. Черновик переживает перезагрузку. */
+    class $bog_tox_fs_editor extends $.$bog_tox_fs_editor {
+        text(next?: string): string;
+    }
+}
+
+declare namespace $ {
 
 	export class $bog_tox_fs_app extends $mol_book2 {
 		Theme( ): $mol_theme_auto
@@ -5080,6 +5365,7 @@ declare namespace $ {
 		Callback( ): $bog_tox_fs_oauth2_callback
 		Status( ): $bog_tox_fs_oauth2_status
 		Local( ): $bog_tox_fs_local
+		Editor( ): $bog_tox_fs_editor
 		plugins( ): readonly(any)[]
 		pages( ): readonly(any)[]
 	}
@@ -5092,7 +5378,7 @@ declare namespace $.$$ {
     class $bog_tox_fs_app extends $.$bog_tox_fs_app {
         session(): $bog_tox_fs_tox_oauth2;
         page(): string;
-        pages(): ($.$bog_tox_fs_home | $.$bog_tox_fs_oauth2_callback | $.$bog_tox_fs_oauth2_status | $.$bog_tox_fs_local)[];
+        pages(): ($.$bog_tox_fs_home | $.$bog_tox_fs_oauth2_callback | $.$bog_tox_fs_oauth2_status | $.$bog_tox_fs_local | $.$bog_tox_fs_editor)[];
     }
 }
 

@@ -523,6 +523,9 @@ $bog_tox_fs_home $mol_list
 			text \The TOX File Service
 		<= Auth $mol_list
 			rows <= auth_rows /
+		<= Editor_link $mol_link
+			title @ \Open editor
+			arg * page \editor
 		<= FileDirectoryList $mol_list
 			rows <= file_directories /
 	Auth_label $mol_text
@@ -644,6 +647,56 @@ $bog_tox_fs_local $mol_page
 		<= Code_query $mol_string
 			value?val <=> code_query?val \
 
+$mol_check_icon $mol_check
+
+$mol_icon_brightness_4 $mol_icon path \M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z
+
+$mol_lights_toggle $mol_check_icon
+	Icon <= Lights_icon $mol_icon_brightness_4
+	hint @ \Toggle lights
+	checked? <=> lights? false
+
+$bog_tox_fs_wysiwyg $mol_view
+	value?val \
+	placeholder @ \
+	height 480
+	menubar \edit insert view format table tools
+	extensions /string
+		\advlist
+		\anchor
+		\autolink
+		\charmap
+		\code
+		\codesample
+		\emoticons
+		\fullscreen
+		\image
+		\insertdatetime
+		\link
+		\lists
+		\media
+		\nonbreaking
+		\pagebreak
+		\preview
+		\searchreplace
+		\table
+		\visualblocks
+		\visualchars
+		\wordcount
+	toolbar /string
+		\link unlink anchor image media table | blocks | forecolor backcolor
+		\undo redo | bold italic underline removeformat | alignleft aligncenter alignright | numlist bullist outdent indent blockquote | hr pagebreak code searchreplace fullscreen
+
+$bog_tox_fs_editor $mol_page
+	title @ \Editor
+	tools /
+		<= Lights $mol_lights_toggle
+	body /
+		<= Editor $bog_tox_fs_wysiwyg
+			value?val <=> text?val \
+			height 560
+			placeholder @ \Start typing…
+
 $bog_tox_fs_app $mol_book2
 	plugins /
 		<= Theme $mol_theme_auto
@@ -652,3 +705,4 @@ $bog_tox_fs_app $mol_book2
 		<= Callback $bog_tox_fs_oauth2_callback
 		<= Status $bog_tox_fs_oauth2_status
 		<= Local $bog_tox_fs_local
+		<= Editor $bog_tox_fs_editor

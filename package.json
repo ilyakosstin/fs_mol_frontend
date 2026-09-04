@@ -238,7 +238,14 @@
     "$bog_tox_fs_oauth2_status",
     "$bog_tox_fs_local",
     "$mol_string",
-    "$mol_hotkey"
+    "$mol_hotkey",
+    "$bog_tox_fs_editor",
+    "$mol_lights_toggle",
+    "$mol_check_icon",
+    "$mol_icon_brightness_4",
+    "$mol_icon_brightness",
+    "$bog_tox_fs_wysiwyg",
+    "$mol_import"
   ],
   "dependencies": {
     "autoinstall": "*",

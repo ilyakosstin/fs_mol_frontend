@@ -1,4 +1,9 @@
 {
+	"$bog_tox_fs_editor_Editor_placeholder": "Start typing…",
+	"$bog_tox_fs_editor_title": "Editor",
+	"$bog_tox_fs_home_Editor_link_title": "Open editor",
+	"$bog_tox_fs_wysiwyg_placeholder": "",
+	"$mol_lights_toggle_hint": "Toggle lights",
 	"$mol_text_code_Copy_hint": "Copy whole code",
 	"$mol_text_header_Link_hint": "Permalink to this section"
 }

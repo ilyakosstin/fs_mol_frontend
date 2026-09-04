@@ -103,9 +103,13 @@
 	pack tox git \https://github.com/b-on-g/tox.git
 	pack sert git \https://github.com/b-on-g/sert.git
 	pack bg git \https://github.com/b-on-g/bg.git
+	pack kit git \https://github.com/b-on-g/kit.git
 \/bog/tox
-	pack fs git \https://github.com/ilyakosstin/fs_mol_frontend
+	pack fs git \https://github.com/ilyakosstin/toxfsapp
 \/mol
 	pack icon git \https://github.com/nin-jin/mol_icon.git
 \/mol/view
 	include \/mol/view/tree/test
+\/bog/tox/fs/wysiwyg
+	build $bog_tox_fs_wysiwyg_version \node ./.npm/.build.mjs
+	deploy \/bog/tox/fs/wysiwyg/.npm/-/tinymce
